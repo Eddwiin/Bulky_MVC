@@ -1,0 +1,17 @@
+﻿@model Category
+
+<form method="PUT">
+    <div class="row">
+        <h2 class="text-primary">Edit category</h2>
+    </div>
+
+    <div class="mb-3">
+        <label>Category Name</label>
+        <input asp-for="Name" type="text" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Display Order</label>
+        <input asp-for="DisplayOrder" type="number" class="form-control" />
+    </div>
+</form>

@@ -1,4 +1,8 @@
-using Bulky_MVC.Data;
+using Bulky.DataAccess.Data;
+using Bulky.DataAccess.Repository;
+using Bulky.DataAccess.Repository.IRepository;
+using BulkyBook.DataAccess.Repository;
+using BulkyBook.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using MySqlConnector;
@@ -20,6 +24,8 @@ namespace Bulky_MVC
              options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
             );
 
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
             var app = builder.Build();
 

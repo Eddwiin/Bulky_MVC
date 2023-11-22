@@ -1,19 +1,21 @@
-﻿using Bulky_MVC.Data;
-using Bulky_MVC.Models;
+﻿using Bulky.DataAccess.Data;
+using Bulky.DataAccess.Repository.IRepository;
+using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bulky_MVC.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext dbContext) {
-            _db = dbContext;
+        private ICategoryRepository _categoryRepo;
+
+        public CategoryController(ICategoryRepository categoryRepo) {
+            _categoryRepo = categoryRepo;
         }
         
         public IActionResult Index()
         {
-            List<Category> objCategories = _db.Categories.ToList();
+            List<Category> objCategories = _categoryRepo.GetAll().ToList();
 
             return View(objCategories);
         }
@@ -28,8 +30,8 @@ namespace Bulky_MVC.Controllers
         {
             if(ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
+                _categoryRepo.Add(obj);
+                _categoryRepo.Save();
             }
    
             return RedirectToAction("Index");
@@ -42,7 +44,7 @@ namespace Bulky_MVC.Controllers
                 return NotFound();
             }
 
-            Category? categoryFromDb = _db.Categories.Find(id);
+            Category? categoryFromDb = _categoryRepo.Get(c => c.Id == id);
 
             if (categoryFromDb == null) {
                 return NotFound();

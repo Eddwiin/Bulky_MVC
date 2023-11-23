@@ -6,8 +6,9 @@ using BulkyBook.DataAccess.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using MySqlConnector;
+using Microsoft.AspNetCore.Identity;
 
-namespace Bulky_MVC
+namespace BulkyBookWeb
 {
     public class Program
     {
@@ -23,6 +24,8 @@ namespace Bulky_MVC
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
              options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
             );
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -41,8 +44,9 @@ namespace Bulky_MVC
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
+            app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",
